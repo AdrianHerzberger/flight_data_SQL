@@ -79,24 +79,21 @@ def print_results(results):
     """
     print(f"Got {len(results)} results.")
     for result in results:
-        # turn result into dictionary
-        result = result._mapping
-
         # Check that all required columns are in place
         try:
             delay = int(result['DELAY']) if result['DELAY'] else 0  # If delay columns is NULL, set it to 0
             origin = result['ORIGIN_AIRPORT']
             dest = result['DESTINATION_AIRPORT']
             airline = result['AIRLINE']
-        except (ValueError, sqlalchemy.exc.SQLAlchemyError) as e:
+        except (ValueError, KeyError) as e:
             print("Error showing results: ", e)
             return
 
         # Different prints for delayed and non-delayed flights
-        if delay and delay > 0:
-            print(f"{result['ID']}. {origin} -> {dest} by {airline}, Delay: {delay} Minutes")
+        if delay > 0:
+            print(f"{result['FLIGHT_ID']}. {origin} -> {dest} by {airline}, Delay: {delay} Minutes")
         else:
-            print(f"{result['ID']}. {origin} -> {dest} by {airline}")
+            print(f"{result['FLIGHT_ID']}. {origin} -> {dest} by {airline}")
 
 
 def show_menu_and_get_input():

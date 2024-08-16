@@ -22,7 +22,29 @@ class FlightData:
         and returns a list of records (dictionary-like objects).
         If an exception was raised, print the error, and return an empty list.
         """
-        pass # Your code here
+        
+        try:
+        # Establish a connection to the database
+            with self._engine.connect() as connection:
+                # Execute the query with the provided parameters
+                result = connection.execute(text(query), params)
+                columns = list(result.keys())
+                print("Columns:", columns)
+                # Debugging: print each row and its type
+                results = []
+                for row in result:
+                    print("Row:", row)
+                    # Construct dictionary from row tuple and column names
+                    row_dict = {columns[i]: row[i] for i in range(len(columns))}
+                    results.append(row_dict)
+                    print(f"Result from row selection: {results}")
+            
+                return results
+
+        except Exception as e:
+            # Print any exceptions that occur
+            print(f"An error occurred: {e}")
+            return []
 
 
     def get_flight_by_id(self, flight_id):
