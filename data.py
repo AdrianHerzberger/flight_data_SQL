@@ -21,7 +21,16 @@ QUERY_DELAYED_FLIGHTS_BY_AIRPORT = """
                         FROM flights
                         JOIN airlines ON flights.airline = airlines.id
                         JOIN airports ON airports.IATA_CODE = flights.ORIGIN_AIRPORT
-                        WHERE airports.IATA_CODE = :airport
+                        WHERE airlines.airline = :airline AND flights.DEPARTURE_DELAY > 0
+                    """
+                    
+QUERY_DELAYED_FLIGHTS_PERCENTAGE = """
+                        SELECT airlines.airline AS AIRLINE,
+                        COUNT(flights.ID) AS TOTAL_FLIGHTS,
+                        SUM(CASE WHEN flights.DEPARTURE_DELAY > 0 THEN 1 ELSE 0 END) AS DELAYED_FLIGHTS
+                        FROM flights
+                        JOIN airlines ON flights.airline = airlines.id
+                        GROUP BY airlines.airline
                     """
 
 
@@ -98,6 +107,13 @@ class FlightData:
         """
         params = {"airport": airport}
         return self._execute_query(QUERY_DELAYED_FLIGHTS_BY_AIRPORT, params)
+    
+    def get_delayed_flights_percentage(self):
+        """
+        Fetches the number of delayed flights and total flights per airline.
+        Returns a list of dictionaries with airline name, total flights, and delayed flights.
+        """
+        return self._execute_query(QUERY_DELAYED_FLIGHTS_PERCENTAGE, {})
 
     def __del__(self):
         """

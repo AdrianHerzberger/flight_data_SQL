@@ -1,9 +1,18 @@
 import data
+import plotting 
 from datetime import datetime
 import sqlalchemy
 
 SQLITE_URI = 'sqlite:///data/flights.sqlite3'
 IATA_LENGTH = 3
+
+
+def plot_delayed_flights_percentage(data_manager):
+    """
+    Fetches the percentage of delayed flights per airline and plots the data.
+    """
+    results = data_manager.get_delayed_flights_percentage()
+    plotting.plot_delayed_flights_percentage(results)
 
 
 def delayed_flights_by_airline(data_manager):
@@ -123,7 +132,8 @@ FUNCTIONS = { 1: (flight_by_id, "Show flight by ID"),
               2: (flights_by_date, "Show flights by date"),
               3: (delayed_flights_by_airline, "Delayed flights by airline"),
               4: (delayed_flights_by_airport, "Delayed flights by origin airport"),
-              5: (quit, "Exit")
+              5: (plot_delayed_flights_percentage, "Plot delayed flights percentage per airline"),
+              6: (quit, "Exit")
              }
 
 
