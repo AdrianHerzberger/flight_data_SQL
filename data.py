@@ -21,7 +21,7 @@ QUERY_DELAYED_FLIGHTS_BY_AIRPORT = """
                         FROM flights
                         JOIN airlines ON flights.airline = airlines.id
                         JOIN airports ON airports.IATA_CODE = flights.ORIGIN_AIRPORT
-                        WHERE airlines.airline = :airline AND flights.DEPARTURE_DELAY > 0
+                        WHERE flights.ORIGIN_AIRPORT = :airport AND flights.DEPARTURE_DELAY > 0
                     """
                     
 QUERY_DELAYED_FLIGHTS_PERCENTAGE = """
@@ -64,7 +64,6 @@ class FlightData:
                 # Debugging: print each row and its type
                 results = []
                 for row in result:
-                    print("Row:", row)
                     # Construct dictionary from row tuple and column names
                     row_dict = {columns[i]: row[i] for i in range(len(columns))}
                     results.append(row_dict)

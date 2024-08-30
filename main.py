@@ -86,7 +86,6 @@ def print_results(results):
     Each object *has* to contain the columns:
     FLIGHT_ID, ORIGIN_AIRPORT, DESTINATION_AIRPORT, AIRLINE, and DELAY.
     """
-    print(f"Got {len(results)} results.")
     for result in results:
         # Check that all required columns are in place
         try:
